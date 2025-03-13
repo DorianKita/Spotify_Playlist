@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from pprint import pprint
+
 
 load_dotenv()
 
@@ -44,7 +46,11 @@ for song in songs_list:
         uri = result["tracks"]["items"][0]["uri"]
         song_uris.append(uri)
     except IndexError:
-        print(f"{song} doesn't exist in Spotify. Skipped.")
+        # print(f"{song} doesn't exist in Spotify. Skipped.")
+        pass
 
 print(song_uris)
 
+playlist = sp.user_playlist_create(user= user_id, name= f'{playlist_year} Billboard 100', public=False)
+
+sp.playlist_add_items(playlist['id'], song_uris)
