@@ -32,9 +32,19 @@ response = requests.get(url=URL, headers=header)
 page = response.text
 
 soup = BeautifulSoup(page, 'html.parser')
-
 data = soup.select(selector='div ul li ul li h3')
-
 songs_list = [song.text.strip() for song in data]
 
-print(songs_list)
+song_uris = []
+year = playlist_year.split("-")[0]
+for song in songs_list:
+    result = sp.search(q=f"track:{song} year:{year}", type="track")
+    # print(result)
+    try:
+        uri = result["tracks"]["items"][0]["uri"]
+        song_uris.append(uri)
+    except IndexError:
+        print(f"{song} doesn't exist in Spotify. Skipped.")
+
+print(song_uris)
+
